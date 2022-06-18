@@ -3,7 +3,7 @@ import threading
 import cv2
 from datetime import datetime
 from marcacion.marcacion import registrarentrada
-
+os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "rtsp_transport;udp"
 
 hora=""
 dataPath = os.getcwd()
@@ -17,12 +17,14 @@ faceClassif = cv2.CascadeClassifier(cv2.data.haarcascades+'haarcascade_frontalfa
 class Reconocimientofacial(object):
     def __init__(self,url):
         url=url
+        print(url)
         self.video=cv2.VideoCapture(url)
     def __del__(self):
         self.video.release()
 
     def rec_facial(self):
         ret, frame = self.video.read()
+        print("Este es el frame ",frame)
         if ret== True:
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             auxFrame = gray.copy()
