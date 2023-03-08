@@ -1,3 +1,4 @@
+from curses import echo
 from django.views.decorators import gzip
 from django.http import StreamingHttpResponse
 from django.http.response import HttpResponse
@@ -289,8 +290,10 @@ def reg_camara_ip(request):
 @gzip.gzip_page
 def recibir_url(request):
     #Esta funcion sirve para ejecutar el streaming de reconocimiento facial
+
     if request.method=='POST':
         id=request.POST['t']
+        print(id)
         camara=Urlcamaraip.objects.get(id=id)
         url=camara.url_camara_ip
         try:
