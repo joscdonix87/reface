@@ -278,85 +278,88 @@ def detalle_empleado(request):
     if request.method=='GET':
         if request.GET['id']!="":
             id=request.GET['id']
-            empleado=Empleado.objects.filter(carnet_empleado=id).first()
-            if empleado:
-                ausencia=[]
-                tur=[]
-                cuenta=0
-                tardias=[]
-                lunes=[]
-                martes=[]
-                miercoles=[]
-                jueves=[]
-                viernes=[]
-                sabado=[]
-                domingo=[]
-                try:
-                    asig=AsigHorario.objects.filter(empleado_id=empleado.id)
-                    if asig.count()>1:
-                        for asi in asig:
-                            turno=Turno.objects.filter(horario_id=asi.horario_id)
-                            print(cuenta)
-                            
-                            
-                            for t in turno:
+            try:
+                empleado=Empleado.objects.filter(carnet_empleado=id).first()
+                if empleado:
+                    ausencia=[]
+                    tur=[]
+                    cuenta=0
+                    tardias=[]
+                    lunes=[]
+                    martes=[]
+                    miercoles=[]
+                    jueves=[]
+                    viernes=[]
+                    sabado=[]
+                    domingo=[]
+                    try:
+                        asig=AsigHorario.objects.filter(empleado_id=empleado.id)
+                        if asig.count()>1:
+                            for asi in asig:
+                                turno=Turno.objects.filter(horario_id=asi.horario_id)
+                                print(cuenta)
                                 
+                                
+                                for t in turno:
+                                    
+                                    if t.dia=="Lunes":
+                                        tur.append(t.horario)
+                                        lunes.append(t.rango_hora)                 
+                                    elif t.dia=="Martes":
+                                        martes.append(t.rango_hora)                
+                                    elif t.dia=="Miercoles":
+                                        miercoles.append(t.rango_hora)              
+                                    elif t.dia=="Jueves":
+                                        jueves.append(t.rango_hora)
+                                    elif t.dia=="Viernes":
+                                        viernes.append(t.rango_hora)              
+                                    elif t.dia=="Sabado":
+                                        sabado.append(t.rango_hora)               
+                                    elif t.dia=="Domingo":
+                                        domingo.append(t.rango_hora)
+                                
+                            print (turno)
+                            ausencia=Ausencias.objects.filter(empleado_id=empleado.id).exclude(esta_faltando=0)
+                            tardias=Marcacion.objects.filter(empleado_id=empleado.id).filter(Q(entrada_tardia=1)|Q(salida_temprana=1))        
+                            return render(request, 'empleado/empleadodetalle/empleadodetalle.html',{'empleado':empleado,'asig':asig,'tur':tur,
+                                                                                'lunes':lunes,'martes':martes,'miercoles':miercoles,
+                                                                                'jueves':jueves,'viernes':viernes,'sabado':sabado,
+                                                                                'domingo':domingo,'ausencia':ausencia,'tardias':tardias,'asigcount':asig.count()})
+                        else:
+                            asig=AsigHorario.objects.get(empleado_id=empleado.id)
+                            turno=Turno.objects.filter(horario_id=asig.horario_id)
+                            for t in turno:
+                                print(t)
                                 if t.dia=="Lunes":
-                                    tur.append(t.horario)
                                     lunes.append(t.rango_hora)                 
                                 elif t.dia=="Martes":
-                                    martes.append(t.rango_hora)                
+                                    martes.append(t.hora)                
                                 elif t.dia=="Miercoles":
-                                    miercoles.append(t.rango_hora)              
+                                    miercoles.append(t.hora)              
                                 elif t.dia=="Jueves":
-                                    jueves.append(t.rango_hora)
+                                    jueves.append(t.hora)
                                 elif t.dia=="Viernes":
-                                    viernes.append(t.rango_hora)              
-                                elif t.dia=="Sabado":
-                                    sabado.append(t.rango_hora)               
+                                    viernes.append(t.hora)              
+                                elif t.dia=="Sábado":
+                                    sabado.append(t.hora)               
                                 elif t.dia=="Domingo":
-                                    domingo.append(t.rango_hora)
-                            
-                        print (turno)
+                                    domingo.append(t.hora)
+                            print(asig.horario)   
+                            ausencia=Ausencias.objects.filter(empleado_id=empleado.id).exclude(esta_faltando=0)
+                            tardias=Marcacion.objects.filter(empleado_id=empleado.id).filter(Q(entrada_tardia=1)|Q(salida_temprana=1))        
+                            return render(request, 'empleado/empleadodetalle/empleadodetalle.html',{'empleado':empleado,'asig':asig,
+                                                                                'lunes':lunes,'martes':martes,'miercoles':miercoles,
+                                                                                'jueves':jueves,'viernes':viernes,'sabado':sabado,
+                                                                                'domingo':domingo,'ausencia':ausencia,'tardias':tardias,'asigcount':asig.count()})
+                    except:
                         ausencia=Ausencias.objects.filter(empleado_id=empleado.id).exclude(esta_faltando=0)
-                        tardias=Marcacion.objects.filter(empleado_id=empleado.id).filter(Q(entrada_tardia=1)|Q(salida_temprana=1))        
-                        return render(request, 'empleado/empleadodetalle/empleadodetalle.html',{'empleado':empleado,'asig':asig,'tur':tur,
-                                                                            'lunes':lunes,'martes':martes,'miercoles':miercoles,
-                                                                            'jueves':jueves,'viernes':viernes,'sabado':sabado,
-                                                                            'domingo':domingo,'ausencia':ausencia,'tardias':tardias,'asigcount':asig.count()})
-                    else:
-                        asig=AsigHorario.objects.get(empleado_id=empleado.id)
-                        turno=Turno.objects.filter(horario_id=asig.horario_id)
-                        for t in turno:
-                            print(t)
-                            if t.dia=="Lunes":
-                                lunes.append(t.rango_hora)                 
-                            elif t.dia=="Martes":
-                                martes.append(t.hora)                
-                            elif t.dia=="Miercoles":
-                                miercoles.append(t.hora)              
-                            elif t.dia=="Jueves":
-                                jueves.append(t.hora)
-                            elif t.dia=="Viernes":
-                                viernes.append(t.hora)              
-                            elif t.dia=="Sábado":
-                                sabado.append(t.hora)               
-                            elif t.dia=="Domingo":
-                                domingo.append(t.hora)
-                        print(asig.horario)   
-                        ausencia=Ausencias.objects.filter(empleado_id=empleado.id).exclude(esta_faltando=0)
-                        tardias=Marcacion.objects.filter(empleado_id=empleado.id).filter(Q(entrada_tardia=1)|Q(salida_temprana=1))        
+                        tardias=Marcacion.objects.filter(empleado_id=empleado.id).filter(Q(entrada_tardia=1)|Q(salida_temprana=1))
                         return render(request, 'empleado/empleadodetalle/empleadodetalle.html',{'empleado':empleado,'asig':asig,
-                                                                            'lunes':lunes,'martes':martes,'miercoles':miercoles,
-                                                                            'jueves':jueves,'viernes':viernes,'sabado':sabado,
-                                                                            'domingo':domingo,'ausencia':ausencia,'tardias':tardias,'asigcount':asig.count()})
-                except:
-                    ausencia=Ausencias.objects.filter(empleado_id=empleado.id).exclude(esta_faltando=0)
-                    tardias=Marcacion.objects.filter(empleado_id=empleado.id).filter(Q(entrada_tardia=1)|Q(salida_temprana=1))
-                    return render(request, 'empleado/empleadodetalle/empleadodetalle.html',{'empleado':empleado,'asig':asig,
-                                                                            'lunes':lunes,'martes':martes,'miercoles':miercoles,
-                                                                            'jueves':jueves,'viernes':viernes,'sabado':sabado,'domingo':domingo,
-                                                                            'ausencia':ausencia,'tardias':tardias, 'asigcount':asig.count()})   
+                                                                                'lunes':lunes,'martes':martes,'miercoles':miercoles,
+                                                                                'jueves':jueves,'viernes':viernes,'sabado':sabado,'domingo':domingo,
+                                                                                'ausencia':ausencia,'tardias':tardias, 'asigcount':asig.count()})   
+            except:
+                return render(request, 'index.html',{'error':'Codigo No encontrado!'})         
         else:
             return render(request, 'index.html',{'error':'Solicitud no procesada'})
     
