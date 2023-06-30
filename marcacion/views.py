@@ -368,9 +368,9 @@ def reconocimientofacial(request):
 
 
 def tardias_rango_fecha(request):
-    if request.method=='POST':
-        fecha_ini=request.POST['fecha1']
-        fecha_fin=request.POST['fecha2']
+    if request.method=='GET':
+        fecha_ini=request.GET['fecha1']
+        fecha_fin=request.GET['fecha2']
         minutos=[]
         minutos1=[]
         datos=[]
