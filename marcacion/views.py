@@ -428,7 +428,7 @@ def tardias_rango_fecha(request):
                 return respuesta #render( request,'marcacion/minutostarde/rangotardia.html',{'datos':datos})
 
 def excelausencias(request):
-    if request.method=='GET':
+    if request.method=='POST':
         fecha_ini=request.GET['fecha1']
         fecha_fin=request.GET['fecha2']
         if fecha_ini:
