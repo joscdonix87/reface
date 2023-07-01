@@ -359,7 +359,8 @@ def detalle_empleado(request):
                                                                                 'jueves':jueves,'viernes':viernes,'sabado':sabado,'domingo':domingo,
                                                                                 'ausencia':ausencia,'tardias':tardias, 'asigcount':asig.count()})   
             except:
-                return render(request, 'index.html',{'error':'Codigo No encontrado!'})         
+                #return render(request, 'index.html',{'error':'Codigo No encontrado!'})         
+                return redirect('inicio')
         else:
             return render(request, 'index.html',{'error':'Solicitud no procesada'})
     
