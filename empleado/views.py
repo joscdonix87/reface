@@ -352,12 +352,15 @@ def detalle_empleado(request):
                                                                                 'jueves':jueves,'viernes':viernes,'sabado':sabado,
                                                                                 'domingo':domingo,'ausencia':ausencia,'tardias':tardias,'asigcount':asig.count()})
                     except:
+                         return redirect('menu_empleado')
+                    else:
                         ausencia=Ausencias.objects.filter(empleado_id=empleado.id).exclude(esta_faltando=0)
                         tardias=Marcacion.objects.filter(empleado_id=empleado.id).filter(Q(entrada_tardia=1)|Q(salida_temprana=1))
                         return render(request, 'empleado/empleadodetalle/empleadodetalle.html',{'empleado':empleado,'asig':asig,
                                                                                 'lunes':lunes,'martes':martes,'miercoles':miercoles,
                                                                                 'jueves':jueves,'viernes':viernes,'sabado':sabado,'domingo':domingo,
                                                                                 'ausencia':ausencia,'tardias':tardias, 'asigcount':asig.count()})   
+                    
             except:
                 #return render(request, 'index.html',{'error':'Codigo No encontrado!'})         
                 return redirect('menu_empleado')
