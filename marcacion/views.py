@@ -425,10 +425,11 @@ def tardias_rango_fecha(request):
                 contenido="attachment; filename={0}".format(archivo)
                 respuesta['Content-Disposition']=contenido
                 wb.save(respuesta)
-                return respuesta #render( request,'marcacion/minutostarde/rangotardia.html',{'datos':datos})
+                return respuesta 
+                #render( request,'marcacion/minutostarde/rangotardia.html',{'datos':datos})
 
 def excelausencias(request):
-    if request.method=='POST':
+    if request.method=='GET':
         fecha_ini=request.GET['fecha1']
         fecha_fin=request.GET['fecha2']
         if fecha_ini:
