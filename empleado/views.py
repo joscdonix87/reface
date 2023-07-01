@@ -360,7 +360,7 @@ def detalle_empleado(request):
                                                                                 'ausencia':ausencia,'tardias':tardias, 'asigcount':asig.count()})   
             except:
                 #return render(request, 'index.html',{'error':'Codigo No encontrado!'})         
-                return redirect('inicio')
+                return redirect('inicio/')
         else:
             return render(request, 'index.html',{'error':'Solicitud no procesada'})
     
